@@ -11,6 +11,18 @@ public class SpectrumManager : MonoBehaviourSingleton<SpectrumManager>
     [SerializeField]
     private float[] samples = new float[512];
 
+    private bool mute = false;
+
+    public bool IsMuted  
+    {
+        get {
+            return mute;
+        }
+        set {
+            mute = value;
+        }
+    }
+
     public float[] Samples
     {
         get 
@@ -19,6 +31,24 @@ public class SpectrumManager : MonoBehaviourSingleton<SpectrumManager>
         }
     }
     
+    public void MuteOff()
+    {
+        IsMuted = false;
+        audioSource.volume = 1;
+    }
 
-    void Update() => audioSource.GetSpectrumData(samples, 0, FFTWindow.Blackman);
+    public void MuteOn()
+    {
+        IsMuted = true;
+        audioSource.volume = 0;
+        samples[0] = 0;
+    }
+
+    void Update() 
+    {
+        if(!IsMuted)
+        {
+            audioSource.GetSpectrumData(samples, 0, FFTWindow.Blackman);
+        }
+    }
 }
