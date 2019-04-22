@@ -46,6 +46,7 @@ namespace MagicLeap
                 {
                     // Mute On
                     SpectrumManager.Instance.MuteOn();
+                    _muteStateText.text = "MUTE STATE - ON";
                 }
 
                 if((MLHands.Left.KeyPose.IsOpenHandBack() && MLHands.Left.KeyPoseConfidence >= KeyPoseConfidenceValue) ||
@@ -53,6 +54,7 @@ namespace MagicLeap
                 {
                     // Mute Off
                     SpectrumManager.Instance.MuteOff();
+                    _muteStateText.text = "MUTE STATE - OFF";
                 }
             }
         }
