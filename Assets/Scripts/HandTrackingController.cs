@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.XR.MagicLeap;
 using UnityLWRPEssentials.Assets.Scripts.Core;
@@ -12,15 +13,18 @@ namespace MagicLeap
         [SerializeField, Tooltip("Text to display gesture status to.")]
         private Text _statusText = null;
 
-        [SerializeField, Tooltip("Text to display when mute is on or off based on gesture.")]
-        private Text _muteStateText = null;
-
         [SerializeField]
         private float KeyPoseConfidenceValue = 0.6f;
 
+        [SerializeField]
+        private UnityEvent onFistKeyPoseDetected;
+
+        [SerializeField]
+        private UnityEvent onOpenHandBackKeyPoseDetected;
+
         void Awake()
         {
-            if(_statusText == null || _muteStateText == null)
+            if(_statusText == null)
             {
                 Debug.LogError("Status and Mute State Text needs to be set");
                 enabled = false;
@@ -44,17 +48,13 @@ namespace MagicLeap
                 if((MLHands.Left.KeyPose.IsFist() && MLHands.Left.KeyPoseConfidence >= KeyPoseConfidenceValue) ||
                 MLHands.Right.KeyPose.IsFist() && MLHands.Right.KeyPoseConfidence >= KeyPoseConfidenceValue)
                 {
-                    // Mute On
-                    SpectrumManager.Instance.MuteOn();
-                    _muteStateText.text = "MUTE STATE - ON";
+                    onFistKeyPoseDetected?.Invoke();
                 }
 
                 if((MLHands.Left.KeyPose.IsOpenHandBack() && MLHands.Left.KeyPoseConfidence >= KeyPoseConfidenceValue) ||
                 MLHands.Right.KeyPose.IsOpenHandBack()  && MLHands.Right.KeyPoseConfidence >= KeyPoseConfidenceValue)
                 {
-                    // Mute Off
-                    SpectrumManager.Instance.MuteOff();
-                    _muteStateText.text = "MUTE STATE - OFF";
+                    onOpenHandBackKeyPoseDetected?.Invoke();
                 }
             }
         }

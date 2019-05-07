@@ -13,6 +13,12 @@ public class SpectrumManager : MonoBehaviourSingleton<SpectrumManager>
 
     private bool mute = false;
 
+    public void SwapAudioSource(AudioSource newAudioSource)
+    {
+        audioSource.Stop();
+        audioSource = newAudioSource;
+    }
+
     public bool IsMuted  
     {
         get {
